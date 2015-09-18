@@ -53,5 +53,5 @@ void Client::Init()
 	
 	fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
 	
-	Run(fd,10000);
+	Run(fd);
 }

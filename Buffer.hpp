@@ -2,6 +2,8 @@
 #ifndef _LIBNETWORK_BUFFER_
 #define _LIBNETWORK_BUFFER_
 
+#include <set>
+
 namespace com
 {
 	namespace toxiclabs
@@ -10,6 +12,9 @@ namespace com
 		{
 			class Buffer
 			{
+				private:
+				
+				static std::set<char *> ptrs;
 				
 				public:
 				
@@ -18,8 +23,10 @@ namespace com
 				char * data;
 				
 				Buffer();
-				Buffer(int id,int size,char * data);
+				Buffer(int size,char * data);
 				~Buffer();
+				
+				void Free()
 			};
 		}
 	}

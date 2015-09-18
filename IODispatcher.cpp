@@ -30,7 +30,7 @@ void IODispatcher::Run(int fd,int timeout)
 	thread_tx = thread(&IODispatcher::Tx,this);
 }
 
-void IODispatcher::Stop()
+void IODispatcher::Disconnect()
 {
 	quit_request=true;
 	
@@ -82,7 +82,7 @@ void IODispatcher::Rx()
 {
 	char data[2048];
 	int data_length;
-	int watchdog=0;
+	
 	
 	while(!quit_request)
 	{
@@ -98,7 +98,6 @@ void IODispatcher::Rx()
 			
 			mutex_rx.unlock();
 			
-			watchdog=0;
 			
 			OnDataAvailable();
 			
@@ -108,7 +107,7 @@ void IODispatcher::Rx()
 			if(errno==EWOULDBLOCK)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-				watchdog+=10;
+				
 			}
 			else
 			{
@@ -116,10 +115,6 @@ void IODispatcher::Rx()
 			}
 		}
 		
-		if(watchdog>timeout)
-		{
-			OnError("Connection timeout");
-		}
 	}
 }
 
@@ -151,6 +146,7 @@ void IODispatcher::Tx()
 			else
 			{
 				OnWrite();
+				//this seems a safe place to free the buffer
 			}
 		}
 		else

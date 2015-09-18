@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 2.6)
 project (libnetwork)
 
 
-add_library(network SHARED Buffer.cpp IODispatcher.cpp)
+add_library(network SHARED Buffer.cpp IODispatcher.cpp Client.cpp Server.cpp)
 
 
 #require pkg-config support

@@ -24,7 +24,11 @@ namespace com
 				int port;
 				int connections;
 				
-				std::map<int,Child> children;
+				std::map<int,Child *> children;
+				
+				std::thread thread_run;
+				
+				void Run();
 				
 				public:
 				
@@ -33,6 +37,23 @@ namespace com
 				virtual ~Server();
 				
 				void Listen(int port,int connections);
+				
+				virtual void OnAccept(int fd);
+				virtual void OnDataAvailable(Child * child);
+			};
+			
+			class Child : public IODispatcher
+			{
+				private:
+				
+				int fd;
+				Server * server;
+				
+				public:
+				
+				Child(Server * server,int fd);
+				
+				void OnDataAvailable();
 			};
 		
 		}

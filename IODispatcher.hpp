@@ -26,7 +26,6 @@ namespace com
 				bool quit_request;
 				int fd;
 				
-				int timeout;
 				
 				std::thread thread_rx;
 				std::thread thread_tx;
@@ -47,8 +46,8 @@ namespace com
 				IODispatcher();
 				virtual ~IODispatcher();
 				
-				void Run(int fd,int timeout);
-				void Stop();
+				void Run(int fd);
+				void Disconnect();
 				
 				void Write(Buffer buffer);
 				Buffer Read();
