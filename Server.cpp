@@ -27,6 +27,17 @@ void Server::Listen(int port,int connections)
 	thread_run=thread(&Server::Run,this);
 }
 
+void Server::Disconnect()
+{
+	for(pair<int,Child *> c : children)
+	{
+		c.second->Disconnect();
+	}
+	
+	//ToDo
+	//Close server socket
+}
+
 void Server::OnAccept(int fd)
 {
 

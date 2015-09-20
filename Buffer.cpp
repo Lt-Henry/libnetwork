@@ -29,5 +29,6 @@ Buffer::~Buffer()
 
 void Buffer::Free()
 {
-	Buffer::ptrs.find();
+	Buffer::ptrs.erase(Buffer::ptrs.find(this->data));
+	delete this->data;
 }

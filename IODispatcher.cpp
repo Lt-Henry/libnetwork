@@ -146,7 +146,7 @@ void IODispatcher::Tx()
 			else
 			{
 				OnWrite();
-				//this seems a safe place to free the buffer
+				buffer.Free();
 			}
 		}
 		else

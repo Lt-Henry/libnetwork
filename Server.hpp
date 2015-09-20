@@ -36,9 +36,25 @@ namespace com
 				
 				virtual ~Server();
 				
+				/*!
+				 Listen for incoming connections.
+				 Non-blocking function.
+				*/
 				void Listen(int port,int connections);
 				
+				/*!
+				 Disconnect childs
+				*/
+				void Disconnect();
+				
+				/*!
+				 Fired when a new connection is stablished
+				*/
 				virtual void OnAccept(int fd);
+				
+				/*!
+				 Fired when new data is ready to read
+				*/
 				virtual void OnDataAvailable(Child * child);
 			};
 			
