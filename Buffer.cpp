@@ -23,6 +23,11 @@ Buffer::Buffer(int size,char * data)
 	
 }
 
+Buffer::Buffer(string & str)
+{
+	Buffer(str.size(),str.c_str());
+}
+
 Buffer::~Buffer()
 {
 }

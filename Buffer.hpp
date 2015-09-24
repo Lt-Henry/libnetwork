@@ -3,6 +3,7 @@
 #define _LIBNETWORK_BUFFER_
 
 #include <set>
+#include <string>
 
 namespace com
 {
@@ -24,6 +25,8 @@ namespace com
 				
 				Buffer();
 				Buffer(int size,char * data);
+				Buffer(std::string & str);
+				
 				~Buffer();
 				
 				void Free()
