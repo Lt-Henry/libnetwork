@@ -10,7 +10,7 @@ Buffer::Buffer()
 {
 }
 
-Buffer::Buffer(int size,char * data)
+Buffer::Buffer(char * data,int size)
 {
 	this->size=size;
 	this->data=data;
@@ -36,4 +36,14 @@ void Buffer::Free()
 {
 	Buffer::ptrs.erase(Buffer::ptrs.find(this->data));
 	delete this->data;
+}
+
+int Buffer::Size()
+{
+	return size;
+}
+
+char * Buffer::Data()
+{
+	return data;
 }

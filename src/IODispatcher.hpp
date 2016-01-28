@@ -46,7 +46,7 @@ namespace com
 				IODispatcher();
 				virtual ~IODispatcher();
 				
-				void Run(int fd);
+				void Run(int fd,int timeout);
 				void Disconnect();
 				
 				void Write(Buffer buffer);
