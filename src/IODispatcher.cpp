@@ -19,11 +19,11 @@ IODispatcher::~IODispatcher()
 }
 
 
-void IODispatcher::Run(int fd,int timeout)
+void IODispatcher::Run(int fd)
 {
 	this->fd=fd;
-	this->timeout=timeout;
-	
+
+
 	quit_request=false;
 	
 	thread_rx = thread(&IODispatcher::Rx,this);
@@ -90,7 +90,7 @@ void IODispatcher::Rx()
 		
 		if(data_length>0)
 		{
-			Buffer buffer(0,data_length,data);
+			Buffer buffer(data,data_length);
 			
 			mutex_rx.lock();
 			
@@ -139,7 +139,7 @@ void IODispatcher::Tx()
 		
 		if(is_tx)
 		{
-			if(send(fd,buffer.data,buffer.size,0)<0)
+			if(send(fd,buffer.Data(),buffer.Size(),0)<0)
 			{
 				OnError("Failed to write on fd");
 			}

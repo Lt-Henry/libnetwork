@@ -4,6 +4,11 @@
 
 #include <stdexcept>
 
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 using namespace std;
 using namespace com::toxiclabs::network;
 

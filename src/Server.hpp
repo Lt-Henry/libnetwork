@@ -62,12 +62,12 @@ namespace com
 			{
 				private:
 				
-				int fd;
+
 				Server * server;
 				
 				public:
 				
-				Child(Server * server,int fd);
+				Child(Server * server);
 				
 				void OnDataAvailable();
 			};
@@ -75,3 +75,5 @@ namespace com
 		}
 	}
 }
+
+#endif

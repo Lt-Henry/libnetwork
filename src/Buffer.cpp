@@ -10,7 +10,7 @@ Buffer::Buffer()
 {
 }
 
-Buffer::Buffer(char * data,int size)
+Buffer::Buffer(const char * data,int size)
 {
 	this->size=size;
 	this->data=data;
@@ -25,7 +25,7 @@ Buffer::Buffer(char * data,int size)
 
 Buffer::Buffer(string & str)
 {
-	Buffer(str.size(),str.c_str());
+	Buffer(str.c_str(),str.size());
 }
 
 Buffer::~Buffer()
@@ -43,7 +43,7 @@ int Buffer::Size()
 	return size;
 }
 
-char * Buffer::Data()
+const char * Buffer::Data()
 {
 	return data;
 }

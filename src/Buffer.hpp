@@ -15,10 +15,10 @@ namespace com
 			{
 				private:
 				
-				static std::set<char *> ptrs;
+				static std::set<const char *> ptrs;
 				
 				int size;
-				char * data;
+				const char * data;
 				
 				public:
 				
@@ -31,7 +31,7 @@ namespace com
 				 Creates a Buffer and copy data.
 				 Data can be freed after that.
 				*/
-				Buffer(char * data,int size);
+				Buffer(const char * data,int size);
 				
 				/*!
 				 Creates a Buffer and stores a string.
@@ -56,7 +56,7 @@ namespace com
 				/*!
 				 Gets data pointer.
 				*/
-				char * Data();
+				const char * Data();
 			};
 		}
 	}
