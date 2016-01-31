@@ -24,7 +24,8 @@ void Client::Connect(string address,int port)
 	this->address=address;
 	this->port=port;
 	
-	thread_init=thread(&Client::Init,this);
+	//thread_init=thread(&Client::Init,this);
+	Init();
 }
 
 void Client::Init()
@@ -35,23 +36,20 @@ void Client::Init()
 	
 	if(fd==-1)
 	{
-		OnError("Cannot create socket");
-		
-		return;
+		throw runtime_error("Cannot create socket");
 	}
-	
+
 	server.sin_addr.s_addr = inet_addr(address.c_str());
 	server.sin_family = AF_INET;
 	server.sin_port = htons(port);
 	
 	if(connect(fd ,(struct sockaddr *)&server , sizeof(server)) < 0)
 	{
-		OnError("Failed to connect to server");
-		
-		return;
+		throw runtime_error("Failed to connect to server");
 	}
-	
-	fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
-	
+
+	//fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
+
+	cout<<"running..."<<endl;
 	Run(fd);
 }

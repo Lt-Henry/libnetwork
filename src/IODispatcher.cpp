@@ -1,6 +1,7 @@
 
 #include "IODispatcher.hpp"
 
+#include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
@@ -23,17 +24,19 @@ void IODispatcher::Run(int fd)
 {
 	this->fd=fd;
 
-
 	quit_request=false;
-	
+
 	thread_rx = thread(&IODispatcher::Rx,this);
 	thread_tx = thread(&IODispatcher::Tx,this);
 }
 
 void IODispatcher::Disconnect()
 {
-	quit_request=true;
+
+	close(fd);
 	
+	quit_request=true;
+
 	thread_rx.join();
 	thread_tx.join();
 }
@@ -46,6 +49,7 @@ void IODispatcher::Write(Buffer buffer)
 	
 	mutex_tx.unlock();
 }
+
 
 Buffer IODispatcher::Read()
 {
@@ -81,48 +85,40 @@ void IODispatcher::OnError(string message)
 void IODispatcher::Rx()
 {
 	char data[2048];
-	int data_length;
-	
-	
+	int size;
+
 	while(!quit_request)
 	{
-		data_length = recv(fd,data,2048,0);
-		
-		if(data_length>0)
+		size=recv(fd,data,2048,0);
+
+		if(size>0)
 		{
-			Buffer buffer(data,data_length);
-			
+			Buffer buffer(data,size);
+
 			mutex_rx.lock();
 			
 			queue_rx.push(buffer);
 			
 			mutex_rx.unlock();
 			
-			
 			OnDataAvailable();
-			
 		}
 		else
 		{
-			if(errno==EWOULDBLOCK)
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-				
-			}
-			else
-			{
-				OnError("Failed to read from fd");
-			}
+			OnError("Failed to read from fd");
 		}
-		
 	}
+
+
 }
 
 void IODispatcher::Tx()
 {
+	int size;
+
 	while(!quit_request)
 	{
-	
+
 		Buffer buffer;
 		bool is_tx = false;
 		
@@ -139,14 +135,17 @@ void IODispatcher::Tx()
 		
 		if(is_tx)
 		{
-			if(send(fd,buffer.Data(),buffer.Size(),0)<0)
-			{
-				OnError("Failed to write on fd");
-			}
-			else
+
+			size=send(fd,buffer.Data(),buffer.Size(),0);
+
+			if(size>0)
 			{
 				OnWrite();
 				buffer.Free();
+			}
+			else
+			{
+				OnError("Failed to write on fd:"+to_string(errno));
 			}
 		}
 		else

@@ -23,9 +23,9 @@ namespace com
 			
 				private:
 				
-				bool quit_request;
 				int fd;
 				
+				bool quit_request;
 				
 				std::thread thread_rx;
 				std::thread thread_tx;

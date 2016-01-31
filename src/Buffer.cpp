@@ -2,18 +2,22 @@
 #include "Buffer.hpp"
 
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 using namespace com::toxiclabs::network;
 
+set<const char *> Buffer::ptrs;
+
 Buffer::Buffer()
 {
+	size=0;
+	data=nullptr;
 }
 
 Buffer::Buffer(const char * data,int size)
 {
 	this->size=size;
-	this->data=data;
 	
 	char * ptr = new char[size];
 	
@@ -21,11 +25,12 @@ Buffer::Buffer(const char * data,int size)
 	
 	Buffer::ptrs.insert(ptr);
 	
+	this->data=ptr;
 }
 
-Buffer::Buffer(string & str)
+Buffer::Buffer(string & str):Buffer(str.c_str(),str.size())
 {
-	Buffer(str.c_str(),str.size());
+
 }
 
 Buffer::~Buffer()

@@ -39,6 +39,8 @@ void Server::Disconnect()
 		c.second->Disconnect();
 	}
 	
+	quit_request=true;
+
 	//ToDo
 	//Close server socket
 }
@@ -59,6 +61,8 @@ void Server::Run()
 	socklen_t cli_len;
 	struct sockaddr_in server, client;
 
+	quit_request=false;
+
 	socket_fd = socket(AF_INET , SOCK_STREAM , 0);
 	if(socket_fd==-1)
 		throw runtime_error("Could not create socket");
@@ -69,21 +73,25 @@ void Server::Run()
 	
 	if(bind(socket_fd,(struct sockaddr *)&server,sizeof(server)) < 0)
 		throw runtime_error("Bind failed");
-		
+
+	cout<<"listening..."<<endl;
 	listen(socket_fd , connections);
 	cli_len=sizeof(client);
-		
+
+	cout<<"entering loop"<<endl;
 	while(!quit_request)
 	{
+		cout<<"Waiting connection"<<endl;
 		client_fd=accept(socket_fd,(struct sockaddr *) &client,&cli_len);
 		OnAccept(client_fd);
 		
-		fcntl(client_fd, F_SETFL, fcntl(client_fd, F_GETFL, 0) | O_NONBLOCK);
+		//fcntl(client_fd, F_SETFL, fcntl(client_fd, F_GETFL, 0) | O_NONBLOCK);
 		
 		children[client_fd]=new Child(this);
 		children[client_fd]->Run(client_fd);
 		
 	}
+	cout<<"out of loop"<<endl;
 }
 
 
